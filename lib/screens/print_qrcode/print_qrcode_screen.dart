@@ -38,28 +38,25 @@ class _PrintQRCodeScreenState extends State<PrintQRCodeScreen> {
   String? index;
   RxBool isEmpty = false.obs;
 
-  Map mapJob = {};
-  Map mapType = {};
-  Map mapLine = {};
-  Map mapProduct = {};
-  Map mapPacket = {};
-
   getData() async {
     await appController.initData();
     await appController.getStorage();
-    mapProduct = await api.listProduct(mapProduct);
-    mapJob = await api.listJob(mapJob);
-    mapPacket = await api.listPacket(mapPacket);
-    mapType = await api.listType(mapType);
-    mapLine = await api.listLine(mapLine);
-
-    print(mapJob);
-    job.value = mapJob.keys.first;
-    type.value = mapType.keys.first;
-    line.value = mapLine.keys.first;
-    product.value = mapProduct.keys.first;
-    packet.value = mapPacket.keys.first;
-
+    if (appController.mapProduct.isEmpty &&
+        appController.mapPacket.isEmpty &&
+        appController.mapType.isEmpty &&
+        appController.mapLine.isEmpty &&
+        appController.mapJob.isEmpty) {
+      appController.mapProduct = await api.listProduct(appController.mapProduct);
+      appController.mapJob = await api.listJob(appController.mapJob);
+      appController.mapPacket = await api.listPacket(appController.mapPacket);
+      appController.mapType = await api.listType(appController.mapType);
+      appController.mapLine = await api.listLine(appController.mapLine);
+    }
+    job.value = appController.mapJob.keys.first;
+    type.value = appController.mapType.keys.first;
+    line.value = appController.mapLine.keys.first;
+    product.value = appController.mapProduct.keys.first;
+    packet.value = appController.mapPacket.keys.first;
   }
 
   @override
@@ -206,7 +203,7 @@ class _PrintQRCodeScreenState extends State<PrintQRCodeScreen> {
                   shrinkWrap: true,
                   children: [
                     Obx(() => MyDropdown2Ez(
-                        items: mapJob,
+                        items: appController.mapJob,
                         title: 'Công việc',
                         hint: 'Chọn công việc',
                         onChanged: (v) {
@@ -214,7 +211,7 @@ class _PrintQRCodeScreenState extends State<PrintQRCodeScreen> {
                         },
                         value: job.value)),
                     Obx(() => MyDropdown2Ez(
-                        items: mapLine,
+                        items: appController.mapLine,
                         title: 'Line in',
                         hint: 'Chọn line in',
                         onChanged: (v) {
@@ -222,7 +219,7 @@ class _PrintQRCodeScreenState extends State<PrintQRCodeScreen> {
                         },
                         value: line.value)),
                     Obx(() => MyDropdown2Ez(
-                        items: mapProduct,
+                        items: appController.mapProduct,
                         title: 'Sản phẩm',
                         hint: 'Chọn sản phẩm',
                         onChanged: (v) {
@@ -230,7 +227,7 @@ class _PrintQRCodeScreenState extends State<PrintQRCodeScreen> {
                         },
                         value: product.value)),
                     Obx(() => MyDropdown2Ez(
-                        items: mapType,
+                        items: appController.mapType,
                         title: 'Loại sản phẩm',
                         hint: 'Chọn sản phẩm',
                         onChanged: (v) {
@@ -238,7 +235,7 @@ class _PrintQRCodeScreenState extends State<PrintQRCodeScreen> {
                         },
                         value: type.value)),
                     Obx(() => MyDropdown2Ez(
-                        items: mapPacket,
+                        items: appController.mapPacket,
                         title: 'Loại bao',
                         hint: 'Chọn loại bao',
                         onChanged: (v) {
