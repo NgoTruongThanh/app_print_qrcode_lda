@@ -36,6 +36,22 @@ class _SearchQRCodeScreenState extends State<SearchQRCodeScreen> {
 
   TextEditingController searchController = TextEditingController();
 
+  Map mapType = {};
+  Map mapProduct = {};
+  Map mapPacket = {};
+
+  getData() async {
+    await appController.initData();
+    await appController.getStorage();
+    mapProduct = await api.listProduct(mapProduct);
+    mapPacket = await api.listPacket(mapPacket);
+    mapType = await api.listType(mapType);
+
+    type.value = mapType.keys.first;
+    product.value = mapProduct.keys.first;
+    packet.value = mapPacket.keys.first;
+  }
+
   Widget listTileQRCode(List<String> list) {
     return Column(
       children: [
@@ -101,10 +117,10 @@ class _SearchQRCodeScreenState extends State<SearchQRCodeScreen> {
 
   @override
   void initState() {
-    product.value = appController.mapProduct.keys.first;
-    type.value = appController.mapType.keys.first;
-    packet.value = appController.mapPacket.keys.first;
-
+    // product.value = appController.mapProduct.keys.first;
+    // type.value = appController.mapType.keys.first;
+    // packet.value = appController.mapPacket.keys.first;
+    getData();
     super.initState();
   }
 
@@ -140,7 +156,7 @@ class _SearchQRCodeScreenState extends State<SearchQRCodeScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Obx(() => MyDropdown2Ez(
-                          items: appController.mapProduct,
+                          items: mapProduct,
                           title: 'Sản phẩm',
                           widthText: getSize(120),
                           hint: 'Chọn sản phẩm',
@@ -159,7 +175,7 @@ class _SearchQRCodeScreenState extends State<SearchQRCodeScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Obx(() => MyDropdown2Ez(
-                          items: appController.mapType,
+                          items: mapType,
                           widthText: getSize(120),
                           title: 'Loại sản phẩm',
                           hint: 'Chọn sản phẩm',
@@ -174,7 +190,7 @@ class _SearchQRCodeScreenState extends State<SearchQRCodeScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Obx(() => MyDropdown2Ez(
-                          items: appController.mapPacket,
+                          items: mapPacket,
                           title: 'Loại bao',
                           widthText: getSize(120),
                           hint: 'Chọn loại bao',
@@ -206,8 +222,7 @@ class _SearchQRCodeScreenState extends State<SearchQRCodeScreen> {
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(const Color(0xFF3459E6)),
                     ),
-                    child: const Text('LẤY DANH SÁCH QR CODE',
-                        style: TextStyle(color: Colors.white, fontSize: 16.0)),
+                    child: const Text('LẤY DANH SÁCH QR CODE', style: TextStyle(color: Colors.white, fontSize: 16.0)),
                   ),
                 ),
               ),

@@ -13,7 +13,7 @@ mixin DataApi on BaseApi {
               ));
       if (response.statusCode == 200) {
         List json = response.data;
-        SessionStorageHelper.setValue('job', json.first ?? '');
+        // SessionStorageHelper.setValue('job', json.first ?? '');
 
         Map data = {};
         for (var element in json) {
@@ -23,6 +23,7 @@ mixin DataApi on BaseApi {
         // ListStringConfig.setListString('jobs', data);
         // SessionStorageHelper.setValue('jobs', data);
       }
+      return mapJob;
     } catch (e) {
       saveLog(e);
       rethrow;
@@ -44,11 +45,12 @@ mixin DataApi on BaseApi {
         for (var element in json) {
           data[element['code']] = element['name'];
         }
-        SessionStorageHelper.setValue('product',  json.first ?? '');
+        // SessionStorageHelper.setValue('product',  json.first ?? '');
         mapProduct = data;
 
         // SessionStorageHelper.setValue('products', data);
       }
+      return mapProduct;
     } catch (e) {
       saveLog(e);
       rethrow;
@@ -72,9 +74,11 @@ mixin DataApi on BaseApi {
         }
         mapType = data;
 
-        SessionStorageHelper.setValue('type', json.first ?? '');
+        // SessionStorageHelper.setValue('type', json.first ?? '');
         // SessionStorageHelper.setValue('types', data);
       }
+      return mapType;
+
     } catch (e) {
       saveLog(e);
       rethrow;
@@ -98,9 +102,11 @@ mixin DataApi on BaseApi {
         }
         mapPacket = data;
 
-        SessionStorageHelper.setValue('packet',  json.first ?? '');
+        // SessionStorageHelper.setValue('packet',  json.first ?? '');
         // SessionStorageHelper.setValue('packets', data);
       }
+      return mapPacket
+          ;
     } catch (e) {
       saveLog(e);
       rethrow;
@@ -125,9 +131,10 @@ mixin DataApi on BaseApi {
         mapLine = data;
 
         // ListStringConfig.setListString('lines', data);
-        SessionStorageHelper.setValue('line',  json.first ?? '');
+        // SessionStorageHelper.setValue('line',  json.first ?? '');
         // SessionStorageHelper.setValue('lines', data);
       }
+      return mapLine;
     } catch (e) {
       saveLog(e);
       rethrow;

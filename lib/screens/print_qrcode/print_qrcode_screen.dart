@@ -38,36 +38,33 @@ class _PrintQRCodeScreenState extends State<PrintQRCodeScreen> {
   String? index;
   RxBool isEmpty = false.obs;
 
-
   Map mapJob = {};
   Map mapType = {};
   Map mapLine = {};
   Map mapProduct = {};
   Map mapPacket = {};
 
-  getData()async{
+  getData() async {
     await appController.initData();
     await appController.getStorage();
+    mapProduct = await api.listProduct(mapProduct);
+    mapJob = await api.listJob(mapJob);
+    mapPacket = await api.listPacket(mapPacket);
+    mapType = await api.listType(mapType);
+    mapLine = await api.listLine(mapLine);
 
-    Future.wait(
-      [
-        api.listJob(mapJob),
-        api.listLine(mapLine),
-        api.listProduct(mapProduct),
-        api.listPacket(mapPacket),
-        api.listType(mapType),
-      ],
-    );
+    print(mapJob);
+    job.value = mapJob.keys.first;
+    type.value = mapType.keys.first;
+    line.value = mapLine.keys.first;
+    product.value = mapProduct.keys.first;
+    packet.value = mapPacket.keys.first;
+
   }
 
   @override
   void initState() {
     getData();
-    job.value = SessionStorageHelper.getValue('job');
-    type.value = SessionStorageHelper.getValue('type');
-    line.value = SessionStorageHelper.getValue('line');
-    product.value = SessionStorageHelper.getValue('product');
-    packet.value = SessionStorageHelper.getValue('packet');
 
     // job.value =appController.mapJob.keys.first;
     // type.value =appController.mapType.keys.first;

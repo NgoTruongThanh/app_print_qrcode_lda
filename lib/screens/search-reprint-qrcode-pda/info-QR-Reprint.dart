@@ -164,7 +164,7 @@ class _InfoQRReprintState extends State<InfoQRReprint> {
                             },
                             value:  line.value)),
                         Obx(() =>  MyDropdown2Ez(
-                            items: const {0:'In tem dọc',1:'In tem ngang'},
+                            items: const {0:'In tem dọc',1:'In tem ngang', 3: 'In tem 50KG'},
                             title: 'Kiểu in',
                             widthText: getSize(100),
 

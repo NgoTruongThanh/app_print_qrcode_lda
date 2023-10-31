@@ -28,8 +28,25 @@ class _ReprintScreenState extends State<ReprintScreenPDA> {
   int loT = 0;
   bool isHaveData = false;
 
+  Map mapType = {};
+  Map mapProduct = {};
+  Map mapPacket = {};
+
+  getData() async {
+    await appController.initData();
+    await appController.getStorage();
+    mapProduct = await api.listProduct(mapProduct);
+    mapPacket = await api.listPacket(mapPacket);
+    mapType = await api.listType(mapType);
+
+    type.value = mapType.keys.first;
+    product.value = mapProduct.keys.first;
+    packet.value = mapPacket.keys.first;
+  }
+
   @override
   void initState() {
+    getData();
     // TODO: implement initState
     super.initState();
     product.value = appController.mapProduct.keys.first;
@@ -62,7 +79,7 @@ class _ReprintScreenState extends State<ReprintScreenPDA> {
     final sp = Padding(
       padding: const EdgeInsets.all(8.0),
       child: Obx(() => MyDropdown2Ez(
-          items: appController.mapProduct,
+          items: mapProduct,
           title: 'Sản phẩm',
           widthText: getSize(120),
           hint: 'Chọn sản phẩm',
@@ -75,28 +92,26 @@ class _ReprintScreenState extends State<ReprintScreenPDA> {
     final loaiSp = Padding(
       padding: const EdgeInsets.all(8.0),
       child: Obx(() => MyDropdown2Ez(
-          items: appController.mapType,
+          items: mapType,
           widthText: getSize(120),
           title: 'Loại sản phẩm',
           hint: 'Chọn sản phẩm',
           onChanged: (v) {
             type.value = v;
             searchQRCode();
-
           },
           value: type.value)),
     );
     final loaiBao = Padding(
       padding: const EdgeInsets.all(8.0),
       child: Obx(() => MyDropdown2Ez(
-          items: appController.mapPacket,
+          items: mapPacket,
           title: 'Loại bao',
           widthText: getSize(120),
           hint: 'Chọn loại bao',
           onChanged: (v) {
             packet.value = v;
             searchQRCode();
-
           },
           value: packet.value)),
     );
@@ -113,15 +128,14 @@ class _ReprintScreenState extends State<ReprintScreenPDA> {
           onChanged: (v) {
             loT = int.parse(v);
             searchQRCode();
-
           }),
     );
     // TODO: implement build
 
     return CommonScaffold(
-        allowBack: true,
-        title: 'Tìm kiếm & in lại QRCode',
-      bottom:    Container(
+      allowBack: true,
+      title: 'Tìm kiếm & in lại QRCode',
+      bottom: Container(
         margin: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -133,76 +147,60 @@ class _ReprintScreenState extends State<ReprintScreenPDA> {
             if (listQRCode.isNotEmpty) {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        InfoQRReprint(listQRCode: listQRCode)),
+                MaterialPageRoute(builder: (context) => InfoQRReprint(listQRCode: listQRCode)),
               );
             }
           },
           style: ButtonStyle(
             padding: MaterialStateProperty.all(const EdgeInsets.all(15.0)),
-            backgroundColor:
-            MaterialStateProperty.all(const Color(0xFF3459E6)),
+            backgroundColor: MaterialStateProperty.all(const Color(0xFF3459E6)),
           ),
-          child: const Text('Tìm kiếm',
-              style: TextStyle(color: Colors.white, fontSize: 16.0)),
+          child: const Text('Tìm kiếm', style: TextStyle(color: Colors.white, fontSize: 16.0)),
         ),
       ),
-        child: ScrollConfiguration(
-            behavior: NoGlowBehaviour(),
-            child: Center(
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          ResponsiveGridRow(
-                            children: [
-                              ResponsiveGridCol(
-                                  lg: 6,
-                                  child: lot),
-                              ResponsiveGridCol(
-                                lg: 6,
-                                child: sp
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          ResponsiveGridRow(
-                            children: [
-                              ResponsiveGridCol(
-                                  lg: 6,
-                                  child: loaiSp),
-                              ResponsiveGridCol(
-                                  lg: 6,
-                                  child: loaiBao
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                        ],
-                      ),
+      child: ScrollConfiguration(
+          behavior: NoGlowBehaviour(),
+          child: Center(
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        ResponsiveGridRow(
+                          children: [
+                            ResponsiveGridCol(lg: 6, child: lot),
+                            ResponsiveGridCol(lg: 6, child: sp),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        ResponsiveGridRow(
+                          children: [
+                            ResponsiveGridCol(lg: 6, child: loaiSp),
+                            ResponsiveGridCol(lg: 6, child: loaiBao),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                      ],
                     ),
                   ),
-
-                ],
-              ),
-            )),
+                ),
+              ],
+            ),
+          )),
     );
   }
 }
+
 class NoGlowBehaviour extends ScrollBehavior {
   @override
-  Widget buildViewportChrome(
-      BuildContext context, Widget child, AxisDirection axisDirection) {
+  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
     return child;
   }
 }
-
