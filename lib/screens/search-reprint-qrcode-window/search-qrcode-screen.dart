@@ -43,10 +43,12 @@ class _SearchQRCodeScreenState extends State<SearchQRCodeScreen> {
   getData() async {
     await appController.initData();
     await appController.getStorage();
-    if (appController.mapProduct.isEmpty && appController.mapPacket.isEmpty && appController.mapType.isEmpty) {
+    if (appController.mapProduct.isEmpty && appController.mapPacket.isEmpty && appController.mapType.isEmpty&& appController.mapLine.isEmpty) {
       appController.mapProduct = await api.listProduct(appController.mapProduct);
       appController.mapPacket = await api.listPacket(appController.mapPacket);
       appController.mapType = await api.listType(appController.mapType);
+      appController.mapLine = await api.listType(appController.mapLine);
+
     }
 
     type.value = appController.mapType.keys.first;
