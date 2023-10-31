@@ -1,4 +1,3 @@
-import 'dart:js_interop';
 
 import 'package:app_print_qrcode_lda/config/list_string_config.dart';
 import 'package:app_print_qrcode_lda/controller/app_controller.dart';

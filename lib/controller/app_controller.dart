@@ -51,25 +51,25 @@ class AppController extends GetxController {
   }
 
   Future setLoginData(data) async {
-    if (GetPlatform.isWeb) {
-      SessionStorageHelper.setValue('token', data['token'] ?? '');
-      SessionStorageHelper.setValue('user', data['user'] ?? '');
-      SessionStorageHelper.setValue('role', data['role']);
-      await getLoginData();
-    } else {
+    // if (GetPlatform.isWeb) {
+    //   SessionStorageHelper.setValue('token', data['token'] ?? '');
+    //   SessionStorageHelper.setValue('user', data['user'] ?? '');
+    //   SessionStorageHelper.setValue('role', data['role']);
+    //   await getLoginData();
+    // } else {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('token', data['token']);
       prefs.setString('user', data['user']);
       prefs.setString('role', data['role']);
       await getLoginData();
-    }
+    // }
   }
 
   getStorage() async {
     if (GetPlatform.isWeb) {
-      token = SessionStorageHelper.getValue('token');
-      user = SessionStorageHelper.getValue('user');
-      role = SessionStorageHelper.getValue('role');
+      // token = SessionStorageHelper.getValue('token');
+      // user = SessionStorageHelper.getValue('user');
+      // role = SessionStorageHelper.getValue('role');
       // mapJob = ListStringConfig.getListString('jobs');
       // mapType = ListStringConfig.getListString('types');
       // mapLine = ListStringConfig.getListString('lines');
@@ -90,9 +90,9 @@ class AppController extends GetxController {
 
   Future resetLoginData() async {
     if (GetPlatform.isWeb) {
-      SessionStorageHelper.removeValue('token');
-      SessionStorageHelper.removeValue('user');
-      SessionStorageHelper.removeValue('role');
+      // SessionStorageHelper.removeValue('token');
+      // SessionStorageHelper.removeValue('user');
+      // SessionStorageHelper.removeValue('role');
 
       await getLoginData();
     } else {
